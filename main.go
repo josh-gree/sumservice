@@ -7,7 +7,10 @@ import (
 	"github.com/labstack/echo/middleware"
 	"net/http"
 	"bytes"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
+
+var local = kingpin.Arg("local", "Running locally?").Bool()
 
 type Job struct{
 	Data []float64 `json:"data"`
@@ -19,6 +22,8 @@ type Result struct{
 }
 
 func main(){
+	kingpin.Parse()
+	
 	Listen()
 }
 
@@ -73,5 +78,9 @@ func Listen() {
 	e.Use(middleware.LoggerWithConfig(logConfig))
 
 	e.POST("/", Recivejob)
-	e.Start(":8000")
+	if *local {
+		e.Start(":8000")
+	} else {
+		e.Start(":8000")
+	}
 }
